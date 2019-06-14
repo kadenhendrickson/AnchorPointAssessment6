@@ -11,24 +11,43 @@ import UIKit
 class PersonController {
     
     private init() {
-      //  people = loadFromPersistentStore()
+        //people = loadFromPersistentStore()
     }
     //sharedInstance
     static let shared = PersonController()
     //SOT
     var people: [Person] = []
-    
-    var data: [[Person]]  {
-        
-        
+   
+    var data: [[Person]]?  {
         var dataArray: [[Person]] = []
         let people = PersonController.shared.people
-        for person in people {
-            let array = [person]
+         var counter = 0
+        if people.count > 1 && people.count % 2 == 0 {
+            while counter < people.count {
+                var array: [Person] = []
+                array.append(people[counter])
+                array.append(people[counter + 1])
+                dataArray.append(array)
+                counter += 2
+            }
+        } else if people.count > 1 {
+            while counter < people.count - 1 {
+                var array: [Person] = []
+                array.append(people[counter])
+                array.append(people[counter + 1])
+                dataArray.append(array)
+                counter += 2
+            }
+            let array = [people[people.count-1]]
             dataArray.append(array)
+        } else {
+            while counter < people.count {
+                var array: [Person] = []
+                array.append(people[counter])
+                dataArray.append(array)
+                counter += 1
+            }
         }
-
-        
         return dataArray
     }
 
@@ -37,11 +56,13 @@ class PersonController {
         self.people.append(person)
         //saveToPersistentStore()
     }
+    
     func deletePerson(person: Person) {
         guard let index = people.firstIndex(of: person) else {return}
         people.remove(at: index)
         //saveToPersistentStore()
     }
+    
     func shufflePeople() {
         self.people.shuffle()
         //saveToPersistentStore()
@@ -56,7 +77,6 @@ class PersonController {
     
     func saveToPersistentStore() {
         let jsonEncoder = JSONEncoder()
-        
         do {
             let data = try jsonEncoder.encode(people)
             let url = fileUrl()
@@ -68,7 +88,6 @@ class PersonController {
     
     func loadFromPersistentStore() -> [Person] {
         let jsonDecoder = JSONDecoder()
-        
         do {
             let url = fileUrl()
             let data = try Data(contentsOf: url)
@@ -79,5 +98,4 @@ class PersonController {
         }
         return []
     }
-    
 }

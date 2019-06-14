@@ -10,8 +10,6 @@ import UIKit
 
 class GroupsTableViewController: UITableViewController {
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -19,41 +17,41 @@ class GroupsTableViewController: UITableViewController {
     @IBAction func addPersonButtonTapped(_ sender: UIBarButtonItem) {
         presentAddPersonAlertController()
     }
-    
+
     @IBAction func randomizeButtonTapped(_ sender: Any) {
         PersonController.shared.shufflePeople()
         self.tableView.reloadData()
     }
     
-    
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return PersonController.shared.data.count
+        return PersonController.shared.data?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Section \(section + 1)"
+        return "Group \(section + 1)"
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return PersonController.shared.data[section].count
+        
+        return PersonController.shared.data?[section].count ?? 0
     }
-
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "personCell", for: indexPath)
-        let person = PersonController.shared.data[indexPath.section][indexPath.row]
-        cell.textLabel?.text = person.name
+        let person = PersonController.shared.data?[indexPath.section][indexPath.row]
+        cell.textLabel?.text = person?.name
         return cell
     }
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+        
             let person = PersonController.shared.people[indexPath.row]
             PersonController.shared.deletePerson(person: person)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
         }
     }
 
@@ -73,6 +71,5 @@ class GroupsTableViewController: UITableViewController {
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true)
     }
-    
-
 }
+
