@@ -11,14 +11,14 @@ import UIKit
 class PersonController {
     
     private init() {
-        //people = loadFromPersistentStore()
+        people = loadFromPersistentStore()
     }
     //sharedInstance
     static let shared = PersonController()
     //SOT
     var people: [Person] = []
    
-    var data: [[Person]]?  {
+    var data: [[Person]]  {
         var dataArray: [[Person]] = []
         let people = PersonController.shared.people
          var counter = 0
@@ -54,18 +54,18 @@ class PersonController {
     func addPerson(name: String) {
         let person = Person(name: name)
         self.people.append(person)
-        //saveToPersistentStore()
+        saveToPersistentStore()
     }
     
     func deletePerson(person: Person) {
         guard let index = people.firstIndex(of: person) else {return}
         people.remove(at: index)
-        //saveToPersistentStore()
+        saveToPersistentStore()
     }
     
     func shufflePeople() {
         self.people.shuffle()
-        //saveToPersistentStore()
+        saveToPersistentStore()
     }
     
     private func fileUrl() -> URL {

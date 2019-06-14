@@ -25,7 +25,7 @@ class GroupsTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return PersonController.shared.data?.count ?? 0
+        return PersonController.shared.data.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -34,13 +34,13 @@ class GroupsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return PersonController.shared.data?[section].count ?? 0
+        return PersonController.shared.data[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "personCell", for: indexPath)
-        let person = PersonController.shared.data?[indexPath.section][indexPath.row]
-        cell.textLabel?.text = person?.name
+        let person = PersonController.shared.data[indexPath.section][indexPath.row]
+        cell.textLabel?.text = person.name
         return cell
     }
     
@@ -48,10 +48,10 @@ class GroupsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
         
-            let person = PersonController.shared.people[indexPath.row]
+            let person = PersonController.shared.data[indexPath.section][indexPath.row]
             PersonController.shared.deletePerson(person: person)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
+            //tableView.deleteRows(at: [indexPath], with: .fade)
+            self.tableView.reloadData()
         }
     }
 
